@@ -460,7 +460,31 @@
       .fab span.label,.waFab span.label{display:none !important;}
     }
 
-  </style>
+  
+
+    /* === Ajuste solicitado: banner largo sin dashboard lateral === */
+    .heroGrid{
+      display:block !important;
+      min-height:auto !important;
+    }
+    .heroCard{
+      width:100% !important;
+      min-height:300px !important;
+      display:flex !important;
+      justify-content:center !important;
+    }
+    .heroCard h1{
+      max-width:900px !important;
+    }
+    .heroCard p{
+      max-width:760px !important;
+    }
+    .sideCard{display:none !important;}
+    @media (max-width:760px){
+      .heroCard{min-height:260px !important;}
+    }
+
+</style>
 </head>
 <body>
   <a class="skip" href="#productos">Saltar al catálogo</a>
@@ -491,11 +515,6 @@
             </div>
           </div>
         </div>
-        <aside class="sideCard" aria-label="Resumen del catálogo">
-          <div class="metric"><div><b id="countProducts">0</b><span>productos visibles</span></div><div class="metricIcon">Productos</div></div>
-          <div class="metric"><div><b id="countCategories">0</b><span>categorías</span></div><div class="metricIcon">Categorías</div></div>
-          <div class="metric"><div><b id="cartMiniTotal">$ 0</b><span>en tu carrito</span></div><div class="metricIcon">Carrito</div></div>
-        </aside>
       </div>
     </section>
 
@@ -672,9 +691,12 @@
     function renderAll(){renderCategories();renderProducts();renderCounts();}
     function renderCounts(){
       const cats=new Set(products.map(p=>p.category||"Otros"));
-      $("#countProducts").textContent=products.length;
-      $("#countCategories").textContent=cats.size;
-      $("#cartMiniTotal").textContent=money(cartSubtotal());
+      const countProducts=document.getElementById("countProducts");
+      const countCategories=document.getElementById("countCategories");
+      const cartMiniTotal=document.getElementById("cartMiniTotal");
+      if(countProducts) countProducts.textContent=products.length;
+      if(countCategories) countCategories.textContent=cats.size;
+      if(cartMiniTotal) cartMiniTotal.textContent=money(cartSubtotal());
     }
     function renderCategories(){
       const cats=["Todos",...Array.from(new Set(products.map(p=>p.category||"Otros"))).sort((a,b)=>a.localeCompare(b,"es"))];
@@ -748,7 +770,7 @@
       $("#cartEmpty").classList.toggle("hidden",cart.length>0);
       $("#cartItems").innerHTML=cart.map(x=>`<div class="cartItem"><div class="cartThumb">${x.image?`<img src="${escapeAttr(x.image)}" alt="${escapeAttr(x.name)}">`:`<span>SIN IMAGEN</span>`}</div><div><div class="cartName">${escapeHTML(x.name)}</div><div class="cartMeta">${escapeHTML(x.unit)} • ${money(x.price)} c/u</div></div><div class="cartRight"><div class="qtyControl"><button data-minus="${x.id}">−</button><b>${x.qty}</b><button data-plus="${x.id}">+</button></div><button class="removeBtn" data-remove="${x.id}">Quitar</button></div></div>`).join("");
       $$('[data-minus]').forEach(b=>b.addEventListener('click',()=>updateQty(b.dataset.minus,-1))); $$('[data-plus]').forEach(b=>b.addEventListener('click',()=>updateQty(b.dataset.plus,1))); $$('[data-remove]').forEach(b=>b.addEventListener('click',()=>removeItem(b.dataset.remove)));
-      const ship=selectedShipping(); const subtotal=cartSubtotal(); $("#subtotal").textContent=money(subtotal); $("#shipping").textContent=money(cart.length?ship.cost||0:0); $("#total").textContent=money(subtotal+(cart.length?Number(ship.cost||0):0)); $("#cartMiniTotal").textContent=money(subtotal);
+      const ship=selectedShipping(); const subtotal=cartSubtotal(); $("#subtotal").textContent=money(subtotal); $("#shipping").textContent=money(cart.length?ship.cost||0:0); $("#total").textContent=money(subtotal+(cart.length?Number(ship.cost||0):0)); const cartMiniTotal=document.getElementById("cartMiniTotal"); if(cartMiniTotal) cartMiniTotal.textContent=money(subtotal);
     }
     function persistCheckout(){ checkout={shipZone:$("#shipZone").value,payMethod:$("#payMethod").value,shipAddress:$("#shipAddress").value.trim(),custName:$("#custName").value.trim(),orderNotes:$("#orderNotes").value.trim()}; save(CHECKOUT_KEY,checkout); renderCart(); }
     function openCart(){renderCheckoutOptions();renderCart();$("#cartDialog").showModal();}
