@@ -1,0 +1,438 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <title>Catálogo | Mercadimas</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+  <style>
+    :root{
+      --green:#137c3a;
+      --green-2:#0f5f2e;
+      --lime:#e9f9d8;
+      --yellow:#ffd23f;
+      --orange:#ff8f1f;
+      --red:#dc2626;
+      --blue:#2563eb;
+      --bg:#f6f8f3;
+      --paper:#ffffff;
+      --paper-2:#fbfff7;
+      --ink:#122016;
+      --muted:#68766d;
+      --line:rgba(18,32,22,.10);
+      --shadow:0 22px 60px rgba(14,82,43,.13);
+      --shadow-soft:0 12px 32px rgba(18,32,22,.08);
+      --radius:24px;
+      --radius-lg:34px;
+      --container:1220px;
+      --safeB:env(safe-area-inset-bottom,0px);
+    }
+    *{box-sizing:border-box}
+    html{scroll-behavior:smooth;-webkit-text-size-adjust:100%}
+    body{
+      margin:0;
+      min-height:100vh;
+      font-family:Inter,system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;
+      color:var(--ink);
+      background:
+        radial-gradient(circle at 6% 8%, rgba(255,210,63,.28), transparent 30%),
+        radial-gradient(circle at 92% 10%, rgba(19,124,58,.18), transparent 30%),
+        linear-gradient(180deg,#fbfff8 0%, var(--bg) 54%, #f4f7ef 100%);
+    }
+    body::before{
+      content:"";
+      position:fixed;
+      inset:0;
+      pointer-events:none;
+      background-image:linear-gradient(rgba(19,124,58,.045) 1px, transparent 1px),linear-gradient(90deg,rgba(19,124,58,.045) 1px, transparent 1px);
+      background-size:36px 36px;
+      mask-image:linear-gradient(to bottom, black, transparent 78%);
+    }
+    button,input,select,textarea{font:inherit}
+    button{cursor:pointer}
+    button:disabled{opacity:.52;cursor:not-allowed;filter:grayscale(.3)}
+    img{max-width:100%;display:block}
+    .hidden{display:none!important}
+    .container{max-width:var(--container);margin:0 auto;padding:0 18px}
+    .skip{position:absolute;left:-999px}.skip:focus{left:12px;top:12px;z-index:999;background:white;padding:10px 14px;border-radius:14px}
+
+    .topbar{
+      position:sticky;top:0;z-index:60;
+      background:rgba(255,255,255,.78);
+      backdrop-filter:blur(18px) saturate(160%);
+      border-bottom:1px solid var(--line);
+    }
+    .topbarInner{height:74px;display:flex;align-items:center;justify-content:space-between;gap:14px}
+    .brand{display:flex;align-items:center;gap:12px;min-width:0}
+    .logoMark{
+      width:48px;height:48px;border-radius:16px;
+      display:grid;place-items:center;
+      background:linear-gradient(135deg,var(--green),#19a858);
+      color:white;box-shadow:0 14px 30px rgba(19,124,58,.26);
+      position:relative;overflow:hidden;
+    }
+    .logoMark::after{content:"";position:absolute;inset:auto -10px -18px -10px;height:32px;background:rgba(255,210,63,.72);transform:rotate(-10deg)}
+    .logoMark span{position:relative;z-index:1;font-size:24px}
+    .brandTitle{font-size:22px;font-weight:900;letter-spacing:-.04em;line-height:1}
+    .brandSub{font-size:12px;color:var(--muted);font-weight:700;margin-top:3px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:260px}
+    .statusPill{display:inline-flex;align-items:center;gap:8px;padding:9px 12px;border-radius:999px;background:white;border:1px solid var(--line);box-shadow:var(--shadow-soft);font-size:12px;font-weight:800;color:#284231;white-space:nowrap}
+    .dot{width:9px;height:9px;border-radius:999px;background:var(--orange);box-shadow:0 0 0 0 rgba(255,143,31,.4);animation:pulse 1.7s infinite}
+    .dot.ok{background:var(--green);box-shadow:none;animation:none}.dot.err{background:var(--red);animation:none}
+    @keyframes pulse{70%{box-shadow:0 0 0 12px rgba(255,143,31,0)}}
+
+    .hero{padding:28px 0 16px}
+    .heroGrid{
+      min-height:330px;
+      display:grid;grid-template-columns:1.22fr .78fr;gap:18px;align-items:stretch;
+    }
+    .heroCard{
+      position:relative;overflow:hidden;
+      background:linear-gradient(135deg,#0f5f2e 0%, #158348 56%, #1aaa5b 100%);
+      color:white;border-radius:var(--radius-lg);box-shadow:var(--shadow);
+      padding:34px;display:flex;flex-direction:column;justify-content:space-between;
+      isolation:isolate;
+    }
+    .heroCard::before{content:"";position:absolute;right:-90px;top:-90px;width:270px;height:270px;border-radius:999px;background:rgba(255,210,63,.24)}
+    .heroCard::after{content:"";position:absolute;right:30px;bottom:-48px;width:210px;height:210px;border-radius:54px;background:rgba(255,255,255,.10);transform:rotate(16deg)}
+    .eyebrow{display:inline-flex;align-items:center;gap:8px;width:max-content;border:1px solid rgba(255,255,255,.20);background:rgba(255,255,255,.12);padding:9px 12px;border-radius:999px;font-size:13px;font-weight:800;backdrop-filter:blur(8px)}
+    .hero h1{margin:20px 0 12px;font-size:clamp(34px,5.2vw,68px);line-height:.92;letter-spacing:-.065em;max-width:720px}
+    .hero p{margin:0;color:rgba(255,255,255,.84);font-weight:600;font-size:17px;line-height:1.55;max-width:590px}
+    .heroActions{display:flex;gap:12px;flex-wrap:wrap;margin-top:24px}
+    .btn{border:0;border-radius:16px;min-height:46px;padding:12px 16px;font-weight:850;display:inline-flex;align-items:center;justify-content:center;gap:9px;transition:transform .18s ease,box-shadow .18s ease,filter .18s ease}
+    .btn:hover{transform:translateY(-2px);filter:brightness(1.02)}
+    .btnPrimary{background:var(--yellow);color:#17220f;box-shadow:0 12px 28px rgba(255,210,63,.24)}
+    .btnDark{background:#111827;color:white}.btnGreen{background:var(--green);color:white}.btnGhost{background:white;color:var(--ink);border:1px solid var(--line)}
+    .btnDanger{background:rgba(220,38,38,.10);color:#991b1b;border:1px solid rgba(220,38,38,.22)}
+    .sideCard{background:rgba(255,255,255,.80);border:1px solid var(--line);border-radius:var(--radius-lg);padding:22px;box-shadow:var(--shadow-soft);backdrop-filter:blur(18px);display:grid;gap:14px;align-content:stretch}
+    .metric{display:flex;align-items:center;justify-content:space-between;gap:14px;background:white;border:1px solid var(--line);border-radius:22px;padding:18px;box-shadow:0 10px 22px rgba(18,32,22,.05)}
+    .metric b{font-size:30px;letter-spacing:-.04em}.metric span{display:block;color:var(--muted);font-weight:750;font-size:13px;margin-top:2px}.metricIcon{font-size:28px}
+
+    .toolbar{position:relative;z-index:2;margin:4px 0 18px;display:grid;grid-template-columns:1fr auto auto;gap:12px;align-items:center}
+    .searchBox{position:relative}
+    .searchBox input,.select{
+      width:100%;min-height:52px;border-radius:18px;border:1px solid var(--line);background:white;box-shadow:var(--shadow-soft);outline:none;color:var(--ink);font-weight:700;padding:0 15px;
+    }
+    .searchBox input{padding-left:46px}.searchIcon{position:absolute;left:17px;top:50%;transform:translateY(-50%);opacity:.65}
+    .chipRow{display:flex;gap:10px;overflow:auto;padding:5px 0 14px;scrollbar-width:none}.chipRow::-webkit-scrollbar{display:none}
+    .chip{flex:0 0 auto;border:1px solid var(--line);background:white;border-radius:999px;padding:10px 14px;display:inline-flex;gap:8px;align-items:center;font-weight:850;color:#2e4535;box-shadow:0 9px 22px rgba(18,32,22,.05);transition:transform .18s ease,background .18s ease,color .18s ease}
+    .chip:hover{transform:translateY(-2px)}.chip.active{background:var(--green);color:white;border-color:transparent;box-shadow:0 16px 34px rgba(19,124,58,.22)}
+
+    .grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:16px;padding-bottom:110px}
+    .card{background:white;border:1px solid var(--line);border-radius:26px;overflow:hidden;box-shadow:var(--shadow-soft);display:flex;flex-direction:column;position:relative;animation:rise .34s ease both;transition:transform .18s ease,box-shadow .18s ease,border-color .18s ease}
+    .card:hover{transform:translateY(-5px);box-shadow:0 24px 48px rgba(18,32,22,.13);border-color:rgba(19,124,58,.20)}
+    @keyframes rise{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}
+    .photo{aspect-ratio:1/1;background:linear-gradient(135deg,#edf8e6,#fff7cf);display:grid;place-items:center;position:relative;overflow:hidden}
+    .photo img{width:100%;height:100%;object-fit:cover}.placeholder{font-size:54px;filter:drop-shadow(0 10px 12px rgba(18,32,22,.12))}
+    .badgeSale{position:absolute;top:12px;left:12px;background:var(--red);color:white;border-radius:999px;padding:7px 10px;font-size:12px;font-weight:900;box-shadow:0 12px 24px rgba(220,38,38,.22)}
+    .badgeStock{position:absolute;right:12px;top:12px;background:rgba(255,255,255,.92);border:1px solid var(--line);border-radius:999px;padding:7px 10px;font-size:12px;font-weight:900;color:#214b31}.badgeStock.low{color:#92400e}.badgeStock.out{color:#991b1b}
+    .cardBody{padding:15px;display:flex;flex-direction:column;gap:9px;flex:1}.cat{font-size:12px;color:var(--green);font-weight:900;text-transform:uppercase;letter-spacing:.04em}.name{font-size:16px;font-weight:900;letter-spacing:-.025em;line-height:1.18;min-height:38px}.desc{color:var(--muted);font-size:13px;font-weight:600;line-height:1.35;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;min-height:36px}.metaLine{display:flex;align-items:center;gap:8px;flex-wrap:wrap;color:#46614d;font-size:12px;font-weight:800}.pillMini{background:#f1f8ee;border:1px solid rgba(19,124,58,.12);padding:6px 8px;border-radius:999px}.priceRow{margin-top:auto;display:flex;align-items:end;justify-content:space-between;gap:12px}.price{display:flex;flex-direction:column;gap:2px}.old{color:var(--muted);text-decoration:line-through;font-size:12px;font-weight:700}.new{font-size:19px;font-weight:950;letter-spacing:-.04em}.cardActions{display:grid;grid-template-columns:1fr 44px;gap:9px;margin-top:10px}.smallBtn{min-height:44px;border-radius:15px;border:1px solid var(--line);background:#fff;font-weight:900;transition:transform .18s ease,background .18s ease}.smallBtn:hover{transform:translateY(-2px)}.smallBtn.add{background:var(--green);color:white;border-color:transparent}.smallBtn.icon{font-size:18px}.smallBtn.added{background:#e8f7df;color:var(--green);border-color:rgba(19,124,58,.20)}
+    .empty{background:white;border:1px dashed rgba(18,32,22,.18);border-radius:26px;padding:34px;text-align:center;color:var(--muted);font-weight:800;box-shadow:var(--shadow-soft)}
+
+    dialog{border:0;border-radius:28px;padding:0;width:min(820px,calc(100vw - 22px));max-height:calc(100vh - 24px);box-shadow:0 30px 90px rgba(18,32,22,.28);background:white;color:var(--ink);overflow:hidden}dialog::backdrop{background:rgba(18,32,22,.58);backdrop-filter:blur(4px)}.modalHead{padding:17px 18px;border-bottom:1px solid var(--line);display:flex;justify-content:space-between;gap:14px;align-items:flex-start}.modalTitle{font-weight:950;font-size:20px;letter-spacing:-.03em}.modalSub{color:var(--muted);font-size:13px;font-weight:700;margin-top:3px}.close{border:1px solid var(--line);background:#fff;border-radius:14px;min-width:42px;height:42px;font-weight:900}.modalBody{padding:18px;overflow:auto}.productDetail{display:grid;grid-template-columns:.95fr 1.05fr;gap:18px}.detailImg{border-radius:24px;overflow:hidden;background:linear-gradient(135deg,#edf8e6,#fff7cf);aspect-ratio:1/1;display:grid;place-items:center;border:1px solid var(--line)}.detailImg img{width:100%;height:100%;object-fit:cover}.kv{display:grid;grid-template-columns:1fr 1fr;gap:10px}.kv div{background:var(--paper-2);border:1px solid var(--line);border-radius:18px;padding:12px}.kv small{display:block;color:var(--muted);font-weight:800;margin-bottom:6px}.kv b{font-size:16px}.detailDesc{color:#425246;line-height:1.55;font-weight:600}.qtyBox{margin-top:14px;background:#f9fff4;border:1px solid var(--line);border-radius:20px;padding:14px;display:grid;grid-template-columns:1fr 120px;gap:10px;align-items:end}.qtyBox label{display:grid;gap:7px;font-size:12px;font-weight:900;color:var(--muted)}.qtyBox input,.qtyBox select,.cartForm input,.cartForm select,.cartForm textarea{border:1px solid var(--line);background:white;border-radius:15px;min-height:46px;padding:0 12px;outline:none;font-weight:750;width:100%}.modalFoot{padding:15px 18px;border-top:1px solid var(--line);display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap;background:#fff}.modalFoot .btn{flex:1 1 170px}
+
+    .cartItems{display:grid;gap:10px}.cartItem{display:grid;grid-template-columns:58px 1fr auto;gap:12px;align-items:center;background:#fbfff7;border:1px solid var(--line);border-radius:20px;padding:10px}.cartThumb{width:58px;height:58px;border-radius:16px;background:linear-gradient(135deg,#edf8e6,#fff7cf);display:grid;place-items:center;overflow:hidden}.cartThumb img{width:100%;height:100%;object-fit:cover}.cartName{font-weight:900;line-height:1.18}.cartMeta{color:var(--muted);font-size:12px;font-weight:750;margin-top:4px}.cartRight{display:grid;justify-items:end;gap:7px}.qtyControl{display:flex;align-items:center;gap:6px}.qtyControl button{width:30px;height:30px;border-radius:10px;border:1px solid var(--line);background:white;font-weight:950}.removeBtn{border:0;background:rgba(220,38,38,.10);color:#991b1b;border-radius:10px;padding:7px 9px;font-size:12px;font-weight:900}.cartForm{margin-top:16px;display:grid;grid-template-columns:1fr 1fr;gap:11px;background:#fbfff7;border:1px solid var(--line);border-radius:22px;padding:14px}.cartForm label{display:grid;gap:7px;color:var(--muted);font-size:12px;font-weight:900}.cartForm .full{grid-column:1/-1}.summary{margin-top:14px;border:1px solid var(--line);background:white;border-radius:22px;padding:14px}.sumRow{display:flex;justify-content:space-between;gap:12px;padding:7px 0;font-weight:850}.sumRow.total{border-top:1px dashed var(--line);margin-top:7px;padding-top:12px;font-size:18px}.fab{position:fixed;right:18px;bottom:calc(18px + var(--safeB));z-index:70;border:0;border-radius:999px;background:var(--green);color:white;padding:13px 16px;display:flex;align-items:center;gap:10px;box-shadow:0 18px 44px rgba(19,124,58,.28);font-weight:900}.fabCount{background:rgba(255,255,255,.22);min-width:28px;height:24px;border-radius:999px;display:grid;place-items:center;padding:0 8px}.waFab{bottom:calc(82px + var(--safeB));background:#25D366}.toast{position:fixed;left:50%;bottom:calc(96px + var(--safeB));transform:translateX(-50%) translateY(10px);z-index:120;background:#111827;color:white;border-radius:999px;padding:11px 15px;opacity:0;pointer-events:none;font-weight:850;box-shadow:0 20px 60px rgba(0,0,0,.18);max-width:calc(100vw - 24px);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;transition:.2s}.toast.show{opacity:1;transform:translateX(-50%)}
+
+    @media (max-width:980px){.heroGrid{grid-template-columns:1fr}.sideCard{grid-template-columns:repeat(3,1fr)}.grid{grid-template-columns:repeat(3,1fr)}}
+    @media (max-width:760px){.topbarInner{height:66px}.brandSub{display:none}.brandTitle{font-size:19px}.logoMark{width:43px;height:43px}.statusPill{padding:8px 10px}.heroCard{padding:25px}.toolbar{grid-template-columns:1fr}.sideCard{grid-template-columns:1fr}.grid{grid-template-columns:repeat(2,1fr)}.productDetail{grid-template-columns:1fr}.cartForm{grid-template-columns:1fr}.cartItem{grid-template-columns:50px 1fr}.cartRight{grid-column:1/-1;display:flex;justify-content:space-between;align-items:center}.fab span.label,.waFab span.label{display:none}.hero{padding-top:18px}}
+    @media (max-width:430px){.container{padding:0 12px}.grid{grid-template-columns:1fr}.hero h1{font-size:36px}.heroCard{border-radius:24px}.metric{padding:14px}.toolbar .btn{width:100%}.modalFoot .btn{flex-basis:100%}}
+  </style>
+</head>
+<body>
+  <a class="skip" href="#productos">Saltar al catálogo</a>
+  <header class="topbar">
+    <div class="container topbarInner">
+      <div class="brand">
+        <div class="logoMark"><span>🛒</span></div>
+        <div>
+          <div class="brandTitle" id="brandTitle">Mercadimas</div>
+          <div class="brandSub" id="brandSub">Mercado, hogar y ahorro en un solo lugar</div>
+        </div>
+      </div>
+      <div class="statusPill" title="Estado de conexión con la base de datos"><span class="dot" id="statusDot"></span><span id="statusText">Conectando…</span></div>
+    </div>
+  </header>
+
+  <main>
+    <section class="hero">
+      <div class="container heroGrid">
+        <div class="heroCard">
+          <div>
+            <div class="eyebrow">✨ Catálogo actualizado en tiempo real</div>
+            <h1>Compra fácil para tu hogar.</h1>
+            <p id="heroText">Encuentra productos de supermercado, aseo, bebidas, cuidado personal y hogar. Agrega al carrito y envía tu pedido por WhatsApp.</p>
+            <div class="heroActions">
+              <a class="btn btnPrimary" href="#productos">Ver productos</a>
+              <button class="btn btnGhost" id="heroWa">Pedir por WhatsApp</button>
+            </div>
+          </div>
+        </div>
+        <aside class="sideCard" aria-label="Resumen del catálogo">
+          <div class="metric"><div><b id="countProducts">0</b><span>productos visibles</span></div><div class="metricIcon">🧺</div></div>
+          <div class="metric"><div><b id="countCategories">0</b><span>categorías</span></div><div class="metricIcon">🏷️</div></div>
+          <div class="metric"><div><b id="cartMiniTotal">$ 0</b><span>en tu carrito</span></div><div class="metricIcon">💚</div></div>
+        </aside>
+      </div>
+    </section>
+
+    <section class="container" id="productos">
+      <div class="toolbar">
+        <div class="searchBox"><span class="searchIcon">🔎</span><input id="searchInput" type="search" placeholder="Buscar arroz, jabón, leche, snacks…" /></div>
+        <select id="sortSelect" class="select" aria-label="Ordenar productos">
+          <option value="featured">Destacados primero</option>
+          <option value="name">Nombre A-Z</option>
+          <option value="priceAsc">Precio menor a mayor</option>
+          <option value="priceDesc">Precio mayor a menor</option>
+        </select>
+        <button class="btn btnGhost" id="onlyOffers">Ofertas</button>
+      </div>
+      <div class="chipRow" id="categoryChips" aria-label="Categorías"></div>
+      <div class="grid" id="productGrid"></div>
+      <div class="empty hidden" id="emptyState">No encontramos productos con ese filtro.</div>
+    </section>
+  </main>
+
+  <dialog id="productDialog">
+    <div class="modalHead">
+      <div><div class="modalTitle" id="dlgName">Producto</div><div class="modalSub" id="dlgSub">—</div></div>
+      <button class="close" id="closeProduct">✕</button>
+    </div>
+    <div class="modalBody">
+      <div class="productDetail">
+        <div class="detailImg" id="dlgImage"></div>
+        <div style="display:grid;gap:14px;align-content:start">
+          <div class="kv">
+            <div><small>Precio</small><b id="dlgPrice">—</b></div>
+            <div><small>Disponible</small><b id="dlgStock">—</b></div>
+            <div><small>Categoría</small><b id="dlgCategory">—</b></div>
+            <div><small>Código</small><b id="dlgCode">—</b></div>
+          </div>
+          <p class="detailDesc" id="dlgDesc"></p>
+          <div class="qtyBox">
+            <label>Presentación<input id="dlgUnit" readonly /></label>
+            <label>Cantidad<input id="dlgQty" type="number" min="1" step="1" value="1" /></label>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="modalFoot">
+      <button class="btn btnGreen" id="dlgAdd">Agregar al carrito</button>
+      <button class="btn btnGhost" id="dlgShare">Compartir producto</button>
+      <button class="btn btnDark" id="dlgDone">Listo</button>
+    </div>
+  </dialog>
+
+  <dialog id="cartDialog">
+    <div class="modalHead">
+      <div><div class="modalTitle">Carrito de compras</div><div class="modalSub">Revisa tu pedido y envíalo a Mercadimas por WhatsApp</div></div>
+      <button class="close" id="closeCart">✕</button>
+    </div>
+    <div class="modalBody">
+      <div id="cartItems" class="cartItems"></div>
+      <div class="empty hidden" id="cartEmpty">Tu carrito está vacío. Agrega productos para enviar tu pedido.</div>
+      <div class="cartForm">
+        <label>Ciudad / zona<select id="shipZone"></select></label>
+        <label>Dirección<input id="shipAddress" placeholder="Ej: Cra 10 # 20-30, Barrio…" /></label>
+        <label>Método de pago<select id="payMethod"></select></label>
+        <label>Nombre<input id="custName" placeholder="Tu nombre (opcional)" /></label>
+        <label class="full">Notas<textarea id="orderNotes" rows="2" placeholder="Referencias, horario de entrega, cambios permitidos…"></textarea></label>
+      </div>
+      <div class="summary">
+        <div class="sumRow"><span>Subtotal</span><span id="subtotal">$ 0</span></div>
+        <div class="sumRow"><span>Envío</span><span id="shipping">$ 0</span></div>
+        <div class="sumRow total"><span>Total</span><span id="total">$ 0</span></div>
+      </div>
+    </div>
+    <div class="modalFoot">
+      <button class="btn btnGreen" id="sendCart">Enviar pedido por WhatsApp</button>
+      <button class="btn btnDanger" id="clearCart">Vaciar carrito</button>
+      <button class="btn btnGhost" id="keepShopping">Seguir comprando</button>
+    </div>
+  </dialog>
+
+  <button class="fab waFab" id="waFab"><span>💬</span><span class="label">WhatsApp</span></button>
+  <button class="fab" id="cartFab"><span>🛒</span><span class="label">Carrito</span><span class="fabCount" id="cartCount">0</span></button>
+  <div class="toast" id="toast"></div>
+
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/12.7.0/firebase-app.js";
+    import { getFirestore, collection, doc, getDoc, onSnapshot } from "https://www.gstatic.com/firebasejs/12.7.0/firebase-firestore.js";
+
+    const firebaseConfig = {
+      apiKey: "AIzaSyAsVvq-okZdhi3eeigyw0CuNMgNe30mYJA",
+      authDomain: "webcatalogo-e8b89.firebaseapp.com",
+      projectId: "webcatalogo-e8b89",
+      storageBucket: "webcatalogo-e8b89.firebasestorage.app",
+      messagingSenderId: "603338095024",
+      appId: "1:603338095024:web:8ffac945f31a0fc4d8be75"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const db = getFirestore(app);
+
+    const DEFAULT_SETTINGS = {
+      storeName:"Mercadimas",
+      slogan:"Mercado, hogar y ahorro en un solo lugar",
+      whatsappNumber:"573215416766",
+      messageIntro:"Hola 👋 Quiero hacer un pedido en {{store}}:",
+      paymentMethods:["Nequi","Daviplata","Transferencia bancaria","Efectivo","Contraentrega"],
+      shippingOptions:[
+        {id:"local",label:"Envío local",cost:5000,eta:"Hoy"},
+        {id:"zona2",label:"Zona cercana",cost:8000,eta:"24–48h"},
+        {id:"pickup",label:"Recoger en tienda",cost:0,eta:"Hoy"}
+      ]
+    };
+    const CATEGORY_ICONS={"Abarrotes":"🥫","Frutas y verduras":"🥦","Lácteos":"🥛","Carnes y congelados":"🥩","Bebidas":"🥤","Aseo del hogar":"🧽","Cuidado personal":"🧴","Mascotas":"🐾","Bebés":"🍼","Panadería":"🥖","Droguería":"💊","Hogar":"🏠","Otros":"🛒"};
+    const CART_KEY="mercadimas_cart_v1";
+    const CHECKOUT_KEY="mercadimas_checkout_v1";
+
+    const $=(s,el=document)=>el.querySelector(s);
+    const $$=(s,el=document)=>Array.from(el.querySelectorAll(s));
+    let products=[]; let settings={...DEFAULT_SETTINGS}; let currentCategory="Todos"; let query=""; let onlyOffers=false; let currentProduct=null;
+    let cart=load(CART_KEY,[]); let checkout=load(CHECKOUT_KEY,{shipZone:"local",payMethod:"Nequi",shipAddress:"",custName:"",orderNotes:""});
+
+    function load(key,fallback){try{return JSON.parse(localStorage.getItem(key))??fallback}catch{return fallback}}
+    function save(key,value){localStorage.setItem(key,JSON.stringify(value))}
+    function money(n){return "$ " + new Intl.NumberFormat("es-CO").format(Math.round(Number(n||0)))}
+    function cleanPhone(n){return String(n||"").replace(/[^\d]/g,"")}
+    function finalPrice(p){const base=Number(p.price||0);const pct=Math.max(0,Math.min(90,Number(p.discountPercent||0)));return pct>0?Math.round(base*(100-pct)/100):base}
+    function totalStock(p){return Math.max(0,Number(p.stock ?? p.totalStock ?? 0)||0)}
+    function isActive(p){return p.active !== false}
+    function imgHTML(p,small=false){const src=String(p.image||"").trim(); if(src) return `<img src="${escapeAttr(src)}" alt="${escapeAttr(p.name||'Producto')}" loading="lazy">`; return `<div class="placeholder">${CATEGORY_ICONS[p.category]||"🛒"}</div>`}
+    function escapeHTML(s){return String(s??"").replace(/[&<>'"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;","'":"&#39;",'"':"&quot;"}[c]))}
+    function escapeAttr(s){return escapeHTML(s)}
+    function toast(msg){const t=$("#toast");t.textContent=msg;t.classList.add("show");clearTimeout(toast.t);toast.t=setTimeout(()=>t.classList.remove("show"),2200)}
+    function setStatus(text,type="warn"){ $("#statusText").textContent=text; const d=$("#statusDot"); d.className="dot"+(type==="ok"?" ok":type==="err"?" err":""); }
+
+    async function loadSettings(){
+      try{
+        const snap=await getDoc(doc(db,"settings","public"));
+        if(snap.exists()) settings={...DEFAULT_SETTINGS,...snap.data()};
+      }catch(e){ console.warn(e); }
+      applySettings();
+    }
+    function applySettings(){
+      $("#brandTitle").textContent=settings.storeName||"Mercadimas";
+      $("#brandSub").textContent=settings.slogan||DEFAULT_SETTINGS.slogan;
+      $("#heroText").textContent=`Encuentra productos de supermercado, aseo, bebidas, cuidado personal y hogar. Agrega al carrito y envía tu pedido por WhatsApp.`;
+      if(!settings.paymentMethods?.includes(checkout.payMethod)) checkout.payMethod=settings.paymentMethods?.[0]||"Nequi";
+      if(!settings.shippingOptions?.some(x=>x.id===checkout.shipZone)) checkout.shipZone=settings.shippingOptions?.[0]?.id||"local";
+      renderCheckoutOptions(); renderCart();
+    }
+    function listenProducts(){
+      setStatus("Conectando…");
+      onSnapshot(collection(db,"products"),(snap)=>{
+        products=snap.docs.map(d=>({id:d.id,...d.data()})).filter(isActive);
+        setStatus("Catálogo en línea","ok");
+        renderAll();
+      },err=>{console.error(err);setStatus("Sin conexión o permisos","err");toast("No se pudo cargar el catálogo")});
+    }
+    function renderAll(){renderCategories();renderProducts();renderCounts();}
+    function renderCounts(){
+      const cats=new Set(products.map(p=>p.category||"Otros"));
+      $("#countProducts").textContent=products.length;
+      $("#countCategories").textContent=cats.size;
+      $("#cartMiniTotal").textContent=money(cartSubtotal());
+    }
+    function renderCategories(){
+      const cats=["Todos",...Array.from(new Set(products.map(p=>p.category||"Otros"))).sort((a,b)=>a.localeCompare(b,"es"))];
+      $("#categoryChips").innerHTML=cats.map(c=>`<button class="chip ${c===currentCategory?'active':''}" data-cat="${escapeAttr(c)}">${c==="Todos"?"🛒":CATEGORY_ICONS[c]||"🏷️"} ${escapeHTML(c)}</button>`).join("");
+      $$(".chip").forEach(b=>b.addEventListener("click",()=>{currentCategory=b.dataset.cat;renderAll();}));
+    }
+    function filteredProducts(){
+      const q=query.trim().toLowerCase();
+      let list=products.filter(p=>{
+        const catOk=currentCategory==="Todos" || (p.category||"Otros")===currentCategory;
+        const text=`${p.name||""} ${p.code||""} ${p.category||""} ${p.brand||""} ${p.description||""}`.toLowerCase();
+        const qOk=!q || text.includes(q);
+        const offerOk=!onlyOffers || Number(p.discountPercent||0)>0;
+        return catOk && qOk && offerOk;
+      });
+      const sort=$("#sortSelect").value;
+      list.sort((a,b)=> sort==="name" ? String(a.name||"").localeCompare(String(b.name||""),"es") : sort==="priceAsc" ? finalPrice(a)-finalPrice(b) : sort==="priceDesc" ? finalPrice(b)-finalPrice(a) : (Number(b.featured||0)-Number(a.featured||0)) || String(a.name||"").localeCompare(String(b.name||""),"es"));
+      return list;
+    }
+    function renderProducts(){
+      const list=filteredProducts();
+      $("#emptyState").classList.toggle("hidden",list.length>0);
+      $("#productGrid").innerHTML=list.map((p,i)=>{
+        const stock=totalStock(p), price=finalPrice(p), base=Number(p.price||0), pct=Number(p.discountPercent||0)||0;
+        const inCart=cart.some(x=>x.id===p.id);
+        return `<article class="card" style="animation-delay:${Math.min(i*25,240)}ms">
+          <div class="photo" role="button" tabindex="0" data-view="${p.id}">${imgHTML(p)}${pct>0?`<div class="badgeSale">-${pct}%</div>`:""}<div class="badgeStock ${stock<=0?'out':stock<=Number(p.minStock||5)?'low':''}">${stock<=0?'Agotado':stock+' disp.'}</div></div>
+          <div class="cardBody">
+            <div class="cat">${escapeHTML(p.category||"Otros")}</div>
+            <div class="name">${escapeHTML(p.name||"Producto")}</div>
+            <div class="desc">${escapeHTML(p.description||"Producto disponible en Mercadimas.")}</div>
+            <div class="metaLine"><span class="pillMini">${escapeHTML(p.unit||"Unidad")}</span>${p.brand?`<span class="pillMini">${escapeHTML(p.brand)}</span>`:""}</div>
+            <div class="priceRow"><div class="price">${pct>0?`<span class="old">${money(base)}</span>`:""}<span class="new">${money(price)}</span></div></div>
+            <div class="cardActions"><button class="smallBtn add ${inCart?'added':''}" data-add="${p.id}" ${stock<=0?'disabled':''}>${inCart?'Agregado':'Agregar'}</button><button class="smallBtn icon" data-view="${p.id}">👁️</button></div>
+          </div>
+        </article>`;
+      }).join("");
+      $$('[data-view]').forEach(el=>el.addEventListener('click',()=>openProduct(el.dataset.view)));
+      $$('[data-add]').forEach(el=>el.addEventListener('click',()=>addToCart(el.dataset.add,1)));
+    }
+    function openProduct(id){
+      const p=products.find(x=>x.id===id); if(!p) return; currentProduct=p;
+      $("#dlgName").textContent=p.name||"Producto"; $("#dlgSub").textContent=`${p.brand||"Mercadimas"} • ${p.unit||"Unidad"}`;
+      $("#dlgImage").innerHTML=imgHTML(p); $("#dlgPrice").textContent=money(finalPrice(p)); $("#dlgStock").textContent=totalStock(p); $("#dlgCategory").textContent=p.category||"Otros"; $("#dlgCode").textContent=p.code||"—"; $("#dlgDesc").textContent=p.description||"Producto disponible para pedido por WhatsApp."; $("#dlgUnit").value=p.unit||"Unidad"; $("#dlgQty").value=1; $("#dlgQty").max=Math.max(1,totalStock(p));
+      $("#dlgAdd").disabled=totalStock(p)<=0; $("#productDialog").showModal();
+    }
+    function addToCart(id,qty=1){
+      const p=products.find(x=>x.id===id); if(!p) return;
+      const stock=totalStock(p); if(stock<=0){toast("Producto agotado");return;}
+      qty=Math.max(1,Number(qty)||1);
+      const existing=cart.find(x=>x.id===id);
+      if(existing){ existing.qty=Math.min(stock,existing.qty+qty); }
+      else cart.push({id:p.id,name:p.name,code:p.code||"",category:p.category||"Otros",unit:p.unit||"Unidad",price:finalPrice(p),basePrice:Number(p.price||0),discountPercent:Number(p.discountPercent||0)||0,stock,qty:Math.min(stock,qty),image:p.image||""});
+      save(CART_KEY,cart); renderCart(); renderProducts(); renderCounts(); toast("Producto agregado al carrito");
+    }
+    function updateQty(id,delta){
+      const item=cart.find(x=>x.id===id); if(!item) return;
+      const p=products.find(x=>x.id===id); const stock=p?totalStock(p):item.stock;
+      item.qty=Math.max(1,Math.min(stock,item.qty+delta)); save(CART_KEY,cart); renderCart(); renderCounts(); renderProducts();
+    }
+    function removeItem(id){cart=cart.filter(x=>x.id!==id);save(CART_KEY,cart);renderCart();renderCounts();renderProducts();}
+    function cartSubtotal(){return cart.reduce((s,x)=>s+(Number(x.price||0)*Number(x.qty||1)),0)}
+    function selectedShipping(){return settings.shippingOptions?.find(x=>x.id===checkout.shipZone)||settings.shippingOptions?.[0]||{cost:0,label:"Envío"}}
+    function renderCheckoutOptions(){
+      $("#shipZone").innerHTML=(settings.shippingOptions||DEFAULT_SETTINGS.shippingOptions).map(o=>`<option value="${escapeAttr(o.id)}">${escapeHTML(o.label)} • ${money(o.cost||0)} ${o.eta?`• ${escapeHTML(o.eta)}`:""}</option>`).join("");
+      $("#payMethod").innerHTML=(settings.paymentMethods||DEFAULT_SETTINGS.paymentMethods).map(m=>`<option value="${escapeAttr(m)}">${escapeHTML(m)}</option>`).join("");
+      $("#shipZone").value=checkout.shipZone; $("#payMethod").value=checkout.payMethod; $("#shipAddress").value=checkout.shipAddress||""; $("#custName").value=checkout.custName||""; $("#orderNotes").value=checkout.orderNotes||"";
+    }
+    function renderCart(){
+      $("#cartCount").textContent=cart.reduce((s,x)=>s+Number(x.qty||1),0);
+      $("#cartEmpty").classList.toggle("hidden",cart.length>0);
+      $("#cartItems").innerHTML=cart.map(x=>`<div class="cartItem"><div class="cartThumb">${x.image?`<img src="${escapeAttr(x.image)}" alt="${escapeAttr(x.name)}">`:`<span>${CATEGORY_ICONS[x.category]||"🛒"}</span>`}</div><div><div class="cartName">${escapeHTML(x.name)}</div><div class="cartMeta">${escapeHTML(x.unit)} • ${money(x.price)} c/u</div></div><div class="cartRight"><div class="qtyControl"><button data-minus="${x.id}">−</button><b>${x.qty}</b><button data-plus="${x.id}">+</button></div><button class="removeBtn" data-remove="${x.id}">Quitar</button></div></div>`).join("");
+      $$('[data-minus]').forEach(b=>b.addEventListener('click',()=>updateQty(b.dataset.minus,-1))); $$('[data-plus]').forEach(b=>b.addEventListener('click',()=>updateQty(b.dataset.plus,1))); $$('[data-remove]').forEach(b=>b.addEventListener('click',()=>removeItem(b.dataset.remove)));
+      const ship=selectedShipping(); const subtotal=cartSubtotal(); $("#subtotal").textContent=money(subtotal); $("#shipping").textContent=money(cart.length?ship.cost||0:0); $("#total").textContent=money(subtotal+(cart.length?Number(ship.cost||0):0)); $("#cartMiniTotal").textContent=money(subtotal);
+    }
+    function persistCheckout(){ checkout={shipZone:$("#shipZone").value,payMethod:$("#payMethod").value,shipAddress:$("#shipAddress").value.trim(),custName:$("#custName").value.trim(),orderNotes:$("#orderNotes").value.trim()}; save(CHECKOUT_KEY,checkout); renderCart(); }
+    function openCart(){renderCheckoutOptions();renderCart();$("#cartDialog").showModal();}
+    function sendCart(){
+      persistCheckout(); if(!cart.length){toast("Agrega productos primero");return;}
+      const ship=selectedShipping(); const subtotal=cartSubtotal(); const total=subtotal+Number(ship.cost||0);
+      const lines=[]; lines.push((settings.messageIntro||DEFAULT_SETTINGS.messageIntro).replace("{{store}}",settings.storeName||"Mercadimas")); lines.push("");
+      cart.forEach((x,i)=>lines.push(`${i+1}. ${x.name} (${x.unit}) x${x.qty} — ${money(Number(x.price)*Number(x.qty))}`));
+      lines.push(""); lines.push(`Subtotal: ${money(subtotal)}`); lines.push(`Envío: ${ship.label} — ${money(ship.cost||0)}`); lines.push(`Total: ${money(total)}`); lines.push(`Pago: ${checkout.payMethod}`);
+      if(checkout.custName) lines.push(`Nombre: ${checkout.custName}`); if(checkout.shipAddress) lines.push(`Dirección: ${checkout.shipAddress}`); if(checkout.orderNotes) lines.push(`Notas: ${checkout.orderNotes}`);
+      const phone=cleanPhone(settings.whatsappNumber); if(!phone){toast("Configura el WhatsApp del negocio");return;}
+      window.open(`https://wa.me/${phone}?text=${encodeURIComponent(lines.join("\n"))}`,"_blank");
+    }
+    function sendGeneralWa(){const phone=cleanPhone(settings.whatsappNumber); if(phone) window.open(`https://wa.me/${phone}?text=${encodeURIComponent('Hola 👋 Quiero información de Mercadimas')}`,'_blank'); else toast('Configura el WhatsApp del negocio');}
+
+    $("#searchInput").addEventListener("input",e=>{query=e.target.value;renderProducts()});
+    $("#sortSelect").addEventListener("change",renderProducts);
+    $("#onlyOffers").addEventListener("click",()=>{onlyOffers=!onlyOffers;$("#onlyOffers").classList.toggle("btnGreen",onlyOffers);$("#onlyOffers").classList.toggle("btnGhost",!onlyOffers);renderProducts();});
+    $("#cartFab").addEventListener("click",openCart); $("#waFab").addEventListener("click",sendGeneralWa); $("#heroWa").addEventListener("click",sendGeneralWa);
+    $("#closeProduct").addEventListener("click",()=>$("#productDialog").close()); $("#dlgDone").addEventListener("click",()=>$("#productDialog").close()); $("#dlgAdd").addEventListener("click",()=>{if(currentProduct){addToCart(currentProduct.id,$("#dlgQty").value);$("#productDialog").close();}});
+    $("#dlgShare").addEventListener("click",async()=>{if(!currentProduct)return; const text=`${currentProduct.name} en Mercadimas: ${money(finalPrice(currentProduct))}`; try{ if(navigator.share) await navigator.share({title:currentProduct.name,text,url:location.href}); else {await navigator.clipboard.writeText(text);toast('Producto copiado')}}catch{}});
+    $("#closeCart").addEventListener("click",()=>$("#cartDialog").close()); $("#keepShopping").addEventListener("click",()=>$("#cartDialog").close()); $("#clearCart").addEventListener("click",()=>{cart=[];save(CART_KEY,cart);renderCart();renderProducts();renderCounts();}); $("#sendCart").addEventListener("click",sendCart);
+    ["#shipZone","#payMethod","#shipAddress","#custName","#orderNotes"].forEach(s=>$(s).addEventListener("input",persistCheckout));
+
+    await loadSettings(); listenProducts(); renderCart(); renderCounts();
+  </script>
+</body>
+</html>
