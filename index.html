@@ -137,6 +137,20 @@
     @media (max-width:980px){.heroGrid{grid-template-columns:1fr}.sideCard{grid-template-columns:repeat(3,1fr)}.grid{grid-template-columns:repeat(3,1fr)}}
     @media (max-width:760px){.topbarInner{height:66px}.brandSub{display:none}.brandTitle{font-size:19px}.logoMark{width:43px;height:43px}.statusPill{padding:8px 10px}.heroCard{padding:25px}.toolbar{grid-template-columns:1fr}.sideCard{grid-template-columns:1fr}.grid{grid-template-columns:repeat(2,1fr)}.productDetail{grid-template-columns:1fr}.cartForm{grid-template-columns:1fr}.cartItem{grid-template-columns:50px 1fr}.cartRight{grid-column:1/-1;display:flex;justify-content:space-between;align-items:center}.fab span.label,.waFab span.label{display:none}.hero{padding-top:18px}}
     @media (max-width:430px){.container{padding:0 12px}.grid{grid-template-columns:1fr}.hero h1{font-size:36px}.heroCard{border-radius:24px}.metric{padding:14px}.toolbar .btn{width:100%}.modalFoot .btn{flex-basis:100%}}
+  
+
+    /* === Estilo empresarial: iconografía sobria y sin animaciones llamativas === */
+    *, *::before, *::after{animation:none !important; transition:none !important;}
+    .btn:hover,.chip:hover,.card:hover,.smallBtn:hover{transform:none !important;}
+    .logoMark{background:#ffffff !important;color:#137c3a !important;border:1px solid rgba(255,255,255,.65) !important;box-shadow:none !important;}
+    .logoMark::after{display:none !important;}
+    .logoMark span{font-size:24px !important;font-weight:950 !important;line-height:1 !important;}
+    .metricIcon{font-size:11px !important;letter-spacing:.08em;text-transform:uppercase;color:#137c3a;background:#edf8e6;border:1px solid rgba(19,124,58,.18);min-width:54px;height:34px;display:grid;place-items:center;border-radius:999px;}
+    .searchIcon{font-size:13px;font-weight:900;letter-spacing:.04em;color:#5f7465;}
+    .smallBtn.icon{font-size:13px;letter-spacing:.03em;text-transform:uppercase;}
+    .placeholder,.cartThumb span{font-size:11px !important;letter-spacing:.08em;text-transform:uppercase;color:#5f7465;font-weight:900;text-align:center;padding:8px;}
+    .fab span:first-child{font-size:12px;letter-spacing:.07em;text-transform:uppercase;font-weight:950;}
+
   </style>
 </head>
 <body>
@@ -144,7 +158,7 @@
   <header class="topbar">
     <div class="container topbarInner">
       <div class="brand">
-        <div class="logoMark"><span>🛒</span></div>
+        <div class="logoMark"><span>M</span></div>
         <div>
           <div class="brandTitle" id="brandTitle">Mercadimas</div>
           <div class="brandSub" id="brandSub">Mercado, hogar y ahorro en un solo lugar</div>
@@ -159,7 +173,7 @@
       <div class="container heroGrid">
         <div class="heroCard">
           <div>
-            <div class="eyebrow">✨ Catálogo actualizado en tiempo real</div>
+            <div class="eyebrow">Catálogo actualizado en tiempo real</div>
             <h1>Compra fácil para tu hogar.</h1>
             <p id="heroText">Encuentra productos de supermercado, aseo, bebidas, cuidado personal y hogar. Agrega al carrito y envía tu pedido por WhatsApp.</p>
             <div class="heroActions">
@@ -169,16 +183,16 @@
           </div>
         </div>
         <aside class="sideCard" aria-label="Resumen del catálogo">
-          <div class="metric"><div><b id="countProducts">0</b><span>productos visibles</span></div><div class="metricIcon">🧺</div></div>
-          <div class="metric"><div><b id="countCategories">0</b><span>categorías</span></div><div class="metricIcon">🏷️</div></div>
-          <div class="metric"><div><b id="cartMiniTotal">$ 0</b><span>en tu carrito</span></div><div class="metricIcon">💚</div></div>
+          <div class="metric"><div><b id="countProducts">0</b><span>productos visibles</span></div><div class="metricIcon">PROD</div></div>
+          <div class="metric"><div><b id="countCategories">0</b><span>categorías</span></div><div class="metricIcon">CAT</div></div>
+          <div class="metric"><div><b id="cartMiniTotal">$ 0</b><span>en tu carrito</span></div><div class="metricIcon">TOTAL</div></div>
         </aside>
       </div>
     </section>
 
     <section class="container" id="productos">
       <div class="toolbar">
-        <div class="searchBox"><span class="searchIcon">🔎</span><input id="searchInput" type="search" placeholder="Buscar arroz, jabón, leche, snacks…" /></div>
+        <div class="searchBox"><span class="searchIcon">BUS</span><input id="searchInput" type="search" placeholder="Buscar arroz, jabón, leche, snacks…" /></div>
         <select id="sortSelect" class="select" aria-label="Ordenar productos">
           <option value="featured">Destacados primero</option>
           <option value="name">Nombre A-Z</option>
@@ -251,8 +265,8 @@
     </div>
   </dialog>
 
-  <button class="fab waFab" id="waFab"><span>💬</span><span class="label">WhatsApp</span></button>
-  <button class="fab" id="cartFab"><span>🛒</span><span class="label">Carrito</span><span class="fabCount" id="cartCount">0</span></button>
+  <button class="fab waFab" id="waFab"><span>WA</span><span class="label">WhatsApp</span></button>
+  <button class="fab" id="cartFab"><span>CAR</span><span class="label">Carrito</span><span class="fabCount" id="cartCount">0</span></button>
   <div class="toast" id="toast"></div>
 
   <script type="module">
@@ -275,7 +289,7 @@
       storeName:"Mercadimas",
       slogan:"Mercado, hogar y ahorro en un solo lugar",
       whatsappNumber:"573215416766",
-      messageIntro:"Hola 👋 Quiero hacer un pedido en {{store}}:",
+      messageIntro:"Hola, quiero hacer un pedido en {{store}}:",
       paymentMethods:["Nequi","Daviplata","Transferencia bancaria","Efectivo","Contraentrega"],
       shippingOptions:[
         {id:"local",label:"Envío local",cost:5000,eta:"Hoy"},
@@ -283,7 +297,7 @@
         {id:"pickup",label:"Recoger en tienda",cost:0,eta:"Hoy"}
       ]
     };
-    const CATEGORY_ICONS={"Abarrotes":"🥫","Frutas y verduras":"🥦","Lácteos":"🥛","Carnes y congelados":"🥩","Bebidas":"🥤","Aseo del hogar":"🧽","Cuidado personal":"🧴","Mascotas":"🐾","Bebés":"🍼","Panadería":"🥖","Droguería":"💊","Hogar":"🏠","Otros":"🛒"};
+    const CATEGORY_ICONS={};
     const CART_KEY="mercadimas_cart_v1";
     const CHECKOUT_KEY="mercadimas_checkout_v1";
 
@@ -299,7 +313,7 @@
     function finalPrice(p){const base=Number(p.price||0);const pct=Math.max(0,Math.min(90,Number(p.discountPercent||0)));return pct>0?Math.round(base*(100-pct)/100):base}
     function totalStock(p){return Math.max(0,Number(p.stock ?? p.totalStock ?? 0)||0)}
     function isActive(p){return p.active !== false}
-    function imgHTML(p,small=false){const src=String(p.image||"").trim(); if(src) return `<img src="${escapeAttr(src)}" alt="${escapeAttr(p.name||'Producto')}" loading="lazy">`; return `<div class="placeholder">${CATEGORY_ICONS[p.category]||"🛒"}</div>`}
+    function imgHTML(p,small=false){const src=String(p.image||"").trim(); if(src) return `<img src="${escapeAttr(src)}" alt="${escapeAttr(p.name||'Producto')}" loading="lazy">`; return `<div class="placeholder">SIN IMAGEN</div>`}
     function escapeHTML(s){return String(s??"").replace(/[&<>'"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;","'":"&#39;",'"':"&quot;"}[c]))}
     function escapeAttr(s){return escapeHTML(s)}
     function toast(msg){const t=$("#toast");t.textContent=msg;t.classList.add("show");clearTimeout(toast.t);toast.t=setTimeout(()=>t.classList.remove("show"),2200)}
@@ -337,7 +351,7 @@
     }
     function renderCategories(){
       const cats=["Todos",...Array.from(new Set(products.map(p=>p.category||"Otros"))).sort((a,b)=>a.localeCompare(b,"es"))];
-      $("#categoryChips").innerHTML=cats.map(c=>`<button class="chip ${c===currentCategory?'active':''}" data-cat="${escapeAttr(c)}">${c==="Todos"?"🛒":CATEGORY_ICONS[c]||"🏷️"} ${escapeHTML(c)}</button>`).join("");
+      $("#categoryChips").innerHTML=cats.map(c=>`<button class="chip ${c===currentCategory?'active':''}" data-cat="${escapeAttr(c)}">${escapeHTML(c)}</button>`).join("");
       $$(".chip").forEach(b=>b.addEventListener("click",()=>{currentCategory=b.dataset.cat;renderAll();}));
     }
     function filteredProducts(){
@@ -359,7 +373,7 @@
       $("#productGrid").innerHTML=list.map((p,i)=>{
         const stock=totalStock(p), price=finalPrice(p), base=Number(p.price||0), pct=Number(p.discountPercent||0)||0;
         const inCart=cart.some(x=>x.id===p.id);
-        return `<article class="card" style="animation-delay:${Math.min(i*25,240)}ms">
+        return `<article class="card">
           <div class="photo" role="button" tabindex="0" data-view="${p.id}">${imgHTML(p)}${pct>0?`<div class="badgeSale">-${pct}%</div>`:""}<div class="badgeStock ${stock<=0?'out':stock<=Number(p.minStock||5)?'low':''}">${stock<=0?'Agotado':stock+' disp.'}</div></div>
           <div class="cardBody">
             <div class="cat">${escapeHTML(p.category||"Otros")}</div>
@@ -367,7 +381,7 @@
             <div class="desc">${escapeHTML(p.description||"Producto disponible en Mercadimas.")}</div>
             <div class="metaLine"><span class="pillMini">${escapeHTML(p.unit||"Unidad")}</span>${p.brand?`<span class="pillMini">${escapeHTML(p.brand)}</span>`:""}</div>
             <div class="priceRow"><div class="price">${pct>0?`<span class="old">${money(base)}</span>`:""}<span class="new">${money(price)}</span></div></div>
-            <div class="cardActions"><button class="smallBtn add ${inCart?'added':''}" data-add="${p.id}" ${stock<=0?'disabled':''}>${inCart?'Agregado':'Agregar'}</button><button class="smallBtn icon" data-view="${p.id}">👁️</button></div>
+            <div class="cardActions"><button class="smallBtn add ${inCart?'added':''}" data-add="${p.id}" ${stock<=0?'disabled':''}>${inCart?'Agregado':'Agregar'}</button><button class="smallBtn icon" data-view="${p.id}">Ver</button></div>
           </div>
         </article>`;
       }).join("");
@@ -405,7 +419,7 @@
     function renderCart(){
       $("#cartCount").textContent=cart.reduce((s,x)=>s+Number(x.qty||1),0);
       $("#cartEmpty").classList.toggle("hidden",cart.length>0);
-      $("#cartItems").innerHTML=cart.map(x=>`<div class="cartItem"><div class="cartThumb">${x.image?`<img src="${escapeAttr(x.image)}" alt="${escapeAttr(x.name)}">`:`<span>${CATEGORY_ICONS[x.category]||"🛒"}</span>`}</div><div><div class="cartName">${escapeHTML(x.name)}</div><div class="cartMeta">${escapeHTML(x.unit)} • ${money(x.price)} c/u</div></div><div class="cartRight"><div class="qtyControl"><button data-minus="${x.id}">−</button><b>${x.qty}</b><button data-plus="${x.id}">+</button></div><button class="removeBtn" data-remove="${x.id}">Quitar</button></div></div>`).join("");
+      $("#cartItems").innerHTML=cart.map(x=>`<div class="cartItem"><div class="cartThumb">${x.image?`<img src="${escapeAttr(x.image)}" alt="${escapeAttr(x.name)}">`:`<span>SIN IMAGEN</span>`}</div><div><div class="cartName">${escapeHTML(x.name)}</div><div class="cartMeta">${escapeHTML(x.unit)} • ${money(x.price)} c/u</div></div><div class="cartRight"><div class="qtyControl"><button data-minus="${x.id}">−</button><b>${x.qty}</b><button data-plus="${x.id}">+</button></div><button class="removeBtn" data-remove="${x.id}">Quitar</button></div></div>`).join("");
       $$('[data-minus]').forEach(b=>b.addEventListener('click',()=>updateQty(b.dataset.minus,-1))); $$('[data-plus]').forEach(b=>b.addEventListener('click',()=>updateQty(b.dataset.plus,1))); $$('[data-remove]').forEach(b=>b.addEventListener('click',()=>removeItem(b.dataset.remove)));
       const ship=selectedShipping(); const subtotal=cartSubtotal(); $("#subtotal").textContent=money(subtotal); $("#shipping").textContent=money(cart.length?ship.cost||0:0); $("#total").textContent=money(subtotal+(cart.length?Number(ship.cost||0):0)); $("#cartMiniTotal").textContent=money(subtotal);
     }
@@ -421,7 +435,7 @@
       const phone=cleanPhone(settings.whatsappNumber); if(!phone){toast("Configura el WhatsApp del negocio");return;}
       window.open(`https://wa.me/${phone}?text=${encodeURIComponent(lines.join("\n"))}`,"_blank");
     }
-    function sendGeneralWa(){const phone=cleanPhone(settings.whatsappNumber); if(phone) window.open(`https://wa.me/${phone}?text=${encodeURIComponent('Hola 👋 Quiero información de Mercadimas')}`,'_blank'); else toast('Configura el WhatsApp del negocio');}
+    function sendGeneralWa(){const phone=cleanPhone(settings.whatsappNumber); if(phone) window.open(`https://wa.me/${phone}?text=${encodeURIComponent('Hola, quiero información de Mercadimas')}`,'_blank'); else toast('Configura el WhatsApp del negocio');}
 
     $("#searchInput").addEventListener("input",e=>{query=e.target.value;renderProducts()});
     $("#sortSelect").addEventListener("change",renderProducts);
